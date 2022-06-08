@@ -1,0 +1,15 @@
+gtk-button-images=1
+
+style "cards"
+{
+     #get rid of padding
+     GtkButton::focus-padding = 0
+     GtkButton::focus-line-width = 0
+     GtkButton::child_displacement_x = 0
+     GtkButton::child_displacement_y = 0
+     xthickness = 0
+     ythickness = 0
+}
+
+widget "*frontimage" style "cards"
+widget "*backimage" style "cards"

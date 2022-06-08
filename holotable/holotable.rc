@@ -1,0 +1,86 @@
+style "chattext"
+{
+  #bg_pixmap[NORMAL] = "hologameboardsmall.jpg"
+  text[NORMAL] = {.9451, .9333, .0118}
+  text[SELECTED] = {1.0, 1.0, 1.0}
+  base[NORMAL] = {0.0, 0.0, 0.0}
+}
+
+style "hand"
+{
+  bg[NORMAL] = {2400, 9500, 32000}
+}
+
+style "chatsendbutton"
+{
+     #bg_pixmap[NORMAL] = "reb.gif"
+     #bg[NORMAL] = { 1.0, 0.0, 0.0 }
+}
+
+style "menu"
+{
+  bg[NORMAL] = { 0.0, 0.5, 1.0 }
+  #fg[NORMAL] = { 0.0, 0.5, 1.0 }
+}
+
+style "viewport"
+{
+  #This sets the padding around the window to the pixmap specified.
+  #bg_pixmap[<STATE>] = "<pixmap filename>"
+  #bg_pixmap[NORMAL] = "ltpage.jpg"
+  bg[NORMAL] = { 0.0, 0.5, 1.0 }
+  fg[NORMAL] = { 0.0, 0.5, 1.0 }
+}
+
+style "piles"
+{
+     bg_pixmap[NORMAL] = "<parent>"
+     bg[NORMAL] = { 0, 0 , 1 }
+     xthickness = 0
+     ythickness = 0
+     GtkButton::focus-padding = 0
+     GtkButton::focus-line-width = 0
+}
+
+style "cards"
+{
+     #get rid of padding
+     GtkButton::focus-padding = 0
+     GtkButton::focus-line-width = 0
+     xthickness = 0
+     ythickness = 0
+}
+
+#font used for showing pile counts
+style "countbox"
+{
+     font_name = "Tahoma 8"
+}
+
+#font used for regular text in key reference dialog
+style "keyreflabels"
+{
+     #font_name = "Tahoma 8"
+}
+
+#font used for titles in key reference dialog
+style "keyreftitles"
+{
+     #font_name = "Tahoma 10"
+}
+
+widget "*chatlogtextview" style "chattext"
+widget "*handarea" style "hand"
+widget "*chatsendbutton*" style "chatsendbutton"
+widget "*acknowledgebutton*" style "chatsendbutton"
+widget "*forcepile" style "piles"
+widget "*reservedeck" style "piles"
+widget "*usedpile" style "piles"
+widget "*lostpile" style "piles"
+widget "*startingpile" style "piles"
+widget "*outofplaypile" style "piles"
+widget "*countbox*" style "countbox"
+widget "*keyreflabel*" style "keyreflabels"
+widget "*keyreftitle*" style "keyreftitles"
+
+widget "*card" style "cards"
