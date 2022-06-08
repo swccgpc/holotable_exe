@@ -4,8 +4,8 @@ name: Build Installer
 
 on: 
   push: 
-    branches: 
-      - main
+    tags:
+      - '*'
 
 jobs:
   create_installer:
