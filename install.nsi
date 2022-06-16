@@ -99,6 +99,150 @@ Section "Holotable" HolotableInstall
   ; https://nsis.sourceforge.io/Docs/Chapter4.html#file
   File /r /x *.res /x *.obj /x *.pch /x .git holotable\*.*
 
+  ; holotable.ini contains the installation path.
+  ; write the file dynamically to accomodate a custom installation path.
+  FileOpen $0 $INSTDIR\holotable.ini w
+  FileWrite $0 "Table width: 900"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Table height: 600"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Startup width: 910"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Startup height: 675"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Startup X position: 0"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Startup Y position: 0"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Server: www.holotable.com"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Port: 5320"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Username: Padawan Learner"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Images: "
+  FileWrite $0 $INSTDIR
+  ; installing to windows, so the path slashes point backwards.
+  FileWrite $0 \cards
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Decks: "
+  FileWrite $0 $INSTDIR
+  FileWrite $0 \decks
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Table background: "
+  FileWrite $0 $INSTDIR
+  ;FileWrite $0 \logo900x600.gif
+  FileWrite $0 \logo2-900x600.gif
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Move single cards in real time: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Move stacks in real time: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Use image zoom: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Image popup delay: 450"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Auto-adjust table size: large"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Use card context menus: false"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Load cards to hand: false"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Fan setting: medium"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Show extra messages: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Use card grouping: false"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Card grouping: below 15"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Force card text load from CDF: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Check version on startup: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Prompt for CDF update: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Prompt for Holotable update: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Check for image file updates: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Prompt before updating image files: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Delete extraneous images: true"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Update small images only: false"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Scan local images: 0"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Country code: 0"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Force Pile: 298 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Reserve Deck: 231 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Used Pile: 256 159 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Lost Pile: 164 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Starting cards pile: 15 92 left"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Out of play pile: 82 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Your text: green"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Opponent's text: red"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Observer's text: orange"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileWrite $0 "Version: "
+  FileWrite $0 "${PRODUCT_VERSION}"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+  FileClose $0
+
+
   ; create desktop shortcut
   CreateShortCut "$DESKTOP\Holotable.lnk" "$INSTDIR\Holotable.exe" ""
   CreateShortCut "$DESKTOP\Holodeck.lnk"  "$INSTDIR\Holodeck.exe"  ""
@@ -110,11 +254,20 @@ Section "Holotable" HolotableInstall
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Holodeck.lnk"  "$INSTDIR\Holodeck.exe"  "" "$INSTDIR\Holodeck.exe"  0
  
   ; write uninstall information to the registry
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "${PRODUCT_NAME} (remove only)"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString" "$INSTDIR\Uninstall.exe"
+  WriteRegStr HKLM "Software\${PRODUCT_NAME}" "" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString" $\"$INSTDIR\Uninstall.exe$\"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "URLInfoAbout" "www.holotable.com"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "HelpLink" "www.holotable.com"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "InstallLocation" "$INSTDIR"
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "NoRepair" 1
+  WriteUninstaller uninstall.exe ;  $INSTDIR\uninstall.exe
 
-  WriteUninstaller "$INSTDIR\Uninstall.exe"
- 
+
+
+
 SectionEnd
 
 ;--------------------------------
