@@ -14,6 +14,7 @@
 
   ;!insertmacro GetTime
 
+
 ;--------------------------------
 ;General
 
@@ -99,19 +100,52 @@ Section "Holotable" HolotableInstall
   ; https://nsis.sourceforge.io/Docs/Chapter4.html#file
   File /r /x *.res /x *.obj /x *.pch /x .git holotable\*.*
 
+  ; get current size of user display
+  System::Call 'user32::GetSystemMetrics(i 0) i .r0'
+  System::Call 'user32::GetSystemMetrics(i 1) i .r1'
+  ; set screen size to be "maximized"
+  !define SCREEN_WIDTH $0 
+  !define SCREEN_HEIGHT $1
+  ; calculate the table height and width based on the screen size
+  IntOp $3 ${SCREEN_WIDTH} - 25
+  !define TABLE_WIDTH $3
+  IntOp $4 ${SCREEN_HEIGHT} - 210
+  !define TABLE_HEIGHT $4
+
+  Var /GLOBAL BACKGROUND_IMAGE
+
+  ; set the background image to one of the known
+  ; background images based on the window size
+  ${If} ${SCREEN_WIDTH} > 899
+    StrCpy $BACKGROUND_IMAGE "logo2-900x600.gif"
+  ${EndIf}
+  ${If} ${SCREEN_WIDTH} > 1023
+    StrCpy $BACKGROUND_IMAGE "logo2-1024x700.gif"
+  ${EndIf}
+  ${If} ${SCREEN_WIDTH} > 1279
+    StrCpy $BACKGROUND_IMAGE "logo2-1280x900.gif"
+  ${EndIf}
+  ${If} ${SCREEN_WIDTH} > 1599
+    StrCpy $BACKGROUND_IMAGE "logo2-1600x900.gif"
+  ${EndIf}
+  ${If} ${SCREEN_WIDTH} > 1919
+    StrCpy $BACKGROUND_IMAGE "logo2-1920x1080.gif"
+  ${EndIf}
+
+
   ; holotable.ini contains the installation path.
   ; write the file dynamically to accomodate a custom installation path.
   FileOpen $0 $INSTDIR\holotable.ini w
-  FileWrite $0 "Table width: 900"
+  FileWrite $0 "Table width: ${TABLE_WIDTH}"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Table height: 600"
+  FileWrite $0 "Table height: ${TABLE_HEIGHT}"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Startup width: 910"
+  FileWrite $0 "Startup width: ${SCREEN_WIDTH}"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Startup height: 675"
+  FileWrite $0 "Startup height: ${SCREEN_HEIGHT}"
   FileWriteByte $0 13
   FileWriteByte $0 10
   FileWrite $0 "Startup X position: 0"
@@ -143,7 +177,7 @@ Section "Holotable" HolotableInstall
   FileWrite $0 "Table background: "
   FileWrite $0 $INSTDIR
   ;FileWrite $0 \logo900x600.gif
-  FileWrite $0 \logo2-900x600.gif
+  FileWrite $0 "\$BACKGROUND_IMAGE"
   FileWriteByte $0 13
   FileWriteByte $0 10
   FileWrite $0 "Move single cards in real time: true"
@@ -209,33 +243,43 @@ Section "Holotable" HolotableInstall
   FileWrite $0 "Country code: 0"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Force Pile: 298 92 right"
-  FileWriteByte $0 13
-  FileWriteByte $0 10
-  FileWrite $0 "Reserve Deck: 231 92 right"
-  FileWriteByte $0 13
-  FileWriteByte $0 10
-  FileWrite $0 "Used Pile: 256 159 right"
-  FileWriteByte $0 13
-  FileWriteByte $0 10
-  FileWrite $0 "Lost Pile: 164 92 right"
-  FileWriteByte $0 13
-  FileWriteByte $0 10
+
   FileWrite $0 "Starting cards pile: 15 92 left"
   FileWriteByte $0 13
   FileWriteByte $0 10
+
+  FileWrite $0 "Force Pile: 293 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+
+  FileWrite $0 "Reserve Deck: 231 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+
+  FileWrite $0 "Used Pile: 256 159 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+
+  FileWrite $0 "Lost Pile: 161 92 right"
+  FileWriteByte $0 13
+  FileWriteByte $0 10
+
   FileWrite $0 "Out of play pile: 82 92 right"
   FileWriteByte $0 13
   FileWriteByte $0 10
+
   FileWrite $0 "Your text: green"
   FileWriteByte $0 13
   FileWriteByte $0 10
+
   FileWrite $0 "Opponent's text: red"
   FileWriteByte $0 13
   FileWriteByte $0 10
+
   FileWrite $0 "Observer's text: orange"
   FileWriteByte $0 13
   FileWriteByte $0 10
+
   FileWrite $0 "Version: "
   FileWrite $0 "${PRODUCT_VERSION}"
   FileWriteByte $0 13
@@ -305,3 +349,22 @@ Section "Uninstall"
  
   DeleteRegKey /ifempty HKCU "Software\Holotable"
 SectionEnd
+
+
+
+
+
+;--------------------------------
+;Functions
+;Function ".onInit"
+;  System::Call 'user32::GetSystemMetrics(i 0) i .r0'
+;  System::Call 'user32::GetSystemMetrics(i 1) i .r1'
+;  !define SCREEN_WIDTH $0 
+;  !define SCREEN_HEIGHT $1
+;  IntOp $3 ${SCREEN_WIDTH} - 25
+;  !define TABLE_WIDTH $3
+;  IntOp $4 ${SCREEN_HEIGHT} - 75
+;  !define TABLE_HEIGHT $4
+;  MessageBox MB_OK|MB_ICONINFORMATION "Screen Resolution: $\r$\n${SCREEN_WIDTH} X ${SCREEN_HEIGHT}$\r$\nTable resolution: ${TABLE_WIDTH}x${TABLE_HEIGHT}"
+;  Quit
+;FunctionEnd
