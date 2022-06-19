@@ -104,48 +104,62 @@ Section "Holotable" HolotableInstall
   System::Call 'user32::GetSystemMetrics(i 0) i .r0'
   System::Call 'user32::GetSystemMetrics(i 1) i .r1'
   ; set screen size to be "maximized"
-  !define SCREEN_WIDTH $0 
-  !define SCREEN_HEIGHT $1
+  ; 1600x900
+  Var /GLOBAL SCREEN_WIDTH
+  Var /GLOBAL SCREEN_HEIGHT
+  StrCpy $SCREEN_WIDTH "$0"
+  StrCpy $SCREEN_HEIGHT "$1"
+
   ; calculate the table height and width based on the screen size
-  IntOp $3 ${SCREEN_WIDTH} - 25
-  !define TABLE_WIDTH $3
-  IntOp $4 ${SCREEN_HEIGHT} - 210
-  !define TABLE_HEIGHT $4
+  ; 1575x600
+  Var /GLOBAL TABLE_WIDTH
+  Var /GLOBAL TABLE_HEIGHT
+
+  IntOp $3 $SCREEN_WIDTH - 25
+  StrCpy $TABLE_WIDTH "$3"
+  IntOp $4 $SCREEN_HEIGHT - 300
+  StrCpy $TABLE_HEIGHT "$4"
+
+  ; the total height of the window is the height of the force window (92) plus the size of the screen height.
+  ; 808
+  Var /GLOBAL ADJUSTED_SCREEN_HEIGHT
+  IntOp $5 $SCREEN_HEIGHT - 92
+  StrCpy $ADJUSTED_SCREEN_HEIGHT "$5"
+
+  ;MessageBox MB_OK|MB_ICONINFORMATION "Screen Resolution: $\r$\n$SCREEN_WIDTH X $SCREEN_HEIGHT$\r$\nTable resolution: $TABLE_WIDTHx$TABLE_HEIGHT$\r$\nAdjusted Screen Height: $ADJUSTED_SCREEN_HEIGHT"
 
   Var /GLOBAL BACKGROUND_IMAGE
-
   ; set the background image to one of the known
   ; background images based on the window size
-  ${If} ${SCREEN_WIDTH} > 899
+  ${If} $SCREEN_WIDTH > 899
     StrCpy $BACKGROUND_IMAGE "logo2-900x600.gif"
   ${EndIf}
-  ${If} ${SCREEN_WIDTH} > 1023
+  ${If} $SCREEN_WIDTH > 1023
     StrCpy $BACKGROUND_IMAGE "logo2-1024x700.gif"
   ${EndIf}
-  ${If} ${SCREEN_WIDTH} > 1279
+  ${If} $SCREEN_WIDTH > 1279
     StrCpy $BACKGROUND_IMAGE "logo2-1280x900.gif"
   ${EndIf}
-  ${If} ${SCREEN_WIDTH} > 1599
+  ${If} $SCREEN_WIDTH > 1599
     StrCpy $BACKGROUND_IMAGE "logo2-1600x900.gif"
   ${EndIf}
-  ${If} ${SCREEN_WIDTH} > 1919
+  ${If} $SCREEN_WIDTH > 1919
     StrCpy $BACKGROUND_IMAGE "logo2-1920x1080.gif"
   ${EndIf}
-
 
   ; holotable.ini contains the installation path.
   ; write the file dynamically to accomodate a custom installation path.
   FileOpen $0 $INSTDIR\holotable.ini w
-  FileWrite $0 "Table width: ${TABLE_WIDTH}"
+  FileWrite $0 "Table width: $TABLE_WIDTH"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Table height: ${TABLE_HEIGHT}"
+  FileWrite $0 "Table height: $TABLE_HEIGHT"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Startup width: ${SCREEN_WIDTH}"
+  FileWrite $0 "Startup width: $SCREEN_WIDTH"
   FileWriteByte $0 13
   FileWriteByte $0 10
-  FileWrite $0 "Startup height: ${SCREEN_HEIGHT}"
+  FileWrite $0 "Startup height: $ADJUSTED_SCREEN_HEIGHT"
   FileWriteByte $0 13
   FileWriteByte $0 10
   FileWrite $0 "Startup X position: 0"
@@ -176,7 +190,6 @@ Section "Holotable" HolotableInstall
   FileWriteByte $0 10
   FileWrite $0 "Table background: "
   FileWrite $0 $INSTDIR
-  ;FileWrite $0 \logo900x600.gif
   FileWrite $0 "\$BACKGROUND_IMAGE"
   FileWriteByte $0 13
   FileWriteByte $0 10
@@ -349,22 +362,3 @@ Section "Uninstall"
  
   DeleteRegKey /ifempty HKCU "Software\Holotable"
 SectionEnd
-
-
-
-
-
-;--------------------------------
-;Functions
-;Function ".onInit"
-;  System::Call 'user32::GetSystemMetrics(i 0) i .r0'
-;  System::Call 'user32::GetSystemMetrics(i 1) i .r1'
-;  !define SCREEN_WIDTH $0 
-;  !define SCREEN_HEIGHT $1
-;  IntOp $3 ${SCREEN_WIDTH} - 25
-;  !define TABLE_WIDTH $3
-;  IntOp $4 ${SCREEN_HEIGHT} - 75
-;  !define TABLE_HEIGHT $4
-;  MessageBox MB_OK|MB_ICONINFORMATION "Screen Resolution: $\r$\n${SCREEN_WIDTH} X ${SCREEN_HEIGHT}$\r$\nTable resolution: ${TABLE_WIDTH}x${TABLE_HEIGHT}"
-;  Quit
-;FunctionEnd
