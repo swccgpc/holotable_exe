@@ -10,7 +10,7 @@ if not re.match(r'.*\/holotable/cards/starwars$', os.getcwd()):
   os.chdir("holotable/cards/starwars")
   print("Current directory: "+os.getcwd())
 
-releases = os.popen("cd ../holotable/Images-HT/starwars && find . -maxdepth 1 -mindepth 1 -type d | sort").read()
+releases = os.popen("cd ../../../../holotable/Images-HT/starwars && find . -maxdepth 1 -mindepth 1 -type d | sort").read()
 for release in releases.split("\n"):
   if (release != ""):
     if (os.path.isdir(release)):
@@ -21,9 +21,9 @@ for release in releases.split("\n"):
       os.mkdir(release+"/large")
     print("  * updating images")
     print("    - copying t_ images")
-    os.popen("rsync -av --include='t_*' --exclude='*' ../holotable/Images-HT/starwars/"+release+"/ "+release+"/").read()
+    os.popen("rsync -av --include='t_*' --exclude='*' ../../../../holotable/Images-HT/starwars/"+release+"/ "+release+"/").read()
     print("    - copying large gif images")
-    os.popen("rsync -av --include='*.gif' --exclude='*' ../holotable/Images-HT/starwars/"+release+"/large/ "+release+"/large/").read()
+    os.popen("rsync -av --include='*.gif' --exclude='*' ../../../../holotable/Images-HT/starwars/"+release+"/large/ "+release+"/large/").read()
 
 
 
